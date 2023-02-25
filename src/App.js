@@ -6,7 +6,6 @@ function App() {
   const [isDrawing, setIsDrawing] = useState(false);
   const [coordinates, setCoordinates] = useState({startX: 0, startY: 0, endX: 0, endY: 0})
   const [labels, setLabels] = useState([])
-  const [allCoordinates, setAllCoordinates] = useState([])
   const canvasRef = useRef(null);
 
   const handleMouseDown = (event) => {
