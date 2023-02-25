@@ -41,28 +41,7 @@ div {
   position: relative;
 }
 
-img {
-  width: 600px;
-  height: 400px;
-  position: relative;
-}
-
-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  margin: 20px;
-}
 
 .main-container {
   display: flex;
-  margin: 20px;
-}
-
-.labels-menu {
-  padding: 20px;
-}
-
-.image-labeling {
-  padding: 20px
 }

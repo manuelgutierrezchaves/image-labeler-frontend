@@ -1,8 +1,9 @@
 import React from 'react';
+import "../styles/Menu.css"
 
-function Menu({ items }) {
-  // Agrupamos las frutas por nombre
-  const groups = items.reduce((acc, curr) => {
+function Menu({ labels, setLabels }) {
+
+  const groups = labels.reduce((acc, curr) => {
     if (!acc[curr.name]) {
       acc[curr.name] = [];
     }
@@ -10,8 +11,12 @@ function Menu({ items }) {
     return acc;
   }, {});
 
+  const handleDelete = (id) => {
+    setLabels(labels.filter(label => label.id_label !== id));
+  }
+
   return (
-    <div>
+    <div className="labels-menu">
       <h1>Labels</h1>
       <ul>
         {Object.keys(groups).map(name => (
@@ -21,6 +26,7 @@ function Menu({ items }) {
               {groups[name].map(fruit => (
                 <li key={fruit.id_label} style={{ backgroundColor: fruit.color }}>
                   ({fruit.coordinates.startX},{fruit.coordinates.startY}) - ({fruit.coordinates.endX},{fruit.coordinates.endY})
+                  <button onClick={() => handleDelete(fruit.id_label)}>X</button>
                 </li>
               ))}
             </ul>

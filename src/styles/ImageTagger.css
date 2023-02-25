@@ -1,0 +1,18 @@
+.image-labeling {
+  padding: 20px;
+  max-width: 600px;
+}
+
+
+img {
+  width: 600px;
+  height: 400px;
+  position: relative;
+}
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 20px;
+}
