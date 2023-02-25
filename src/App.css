@@ -36,3 +36,19 @@
     transform: rotate(360deg);
   }
 }
+
+div {
+  position: relative;
+}
+
+img {
+  width: 600px;
+  height: 400px;
+  position: relative;
+}
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
