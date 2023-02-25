@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import "./App.css"
+import { v4 as uuidv4 } from 'uuid';
 
 function App() {
   const [isDrawing, setIsDrawing] = useState(false);
   const [coordinates, setCoordinates] = useState({startX: 0, startY: 0, endX: 0, endY: 0})
+  const [labels, setLabels] = useState([])
   const [allCoordinates, setAllCoordinates] = useState([])
   const canvasRef = useRef(null);
 
@@ -22,7 +24,7 @@ function App() {
 
   const handleMouseUp = () => {
     if (isDrawing) {
-      setAllCoordinates([...allCoordinates, coordinates])}
+      setLabels([...labels, {id_label: uuidv4(), coordinates: coordinates}])}
     setIsDrawing(false);
     
   };
@@ -33,24 +35,24 @@ function App() {
     const width = coordinates.endX - coordinates.startX;
     const height = coordinates.endY - coordinates.startY;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // ctx.strokeStyle = "blue"
     ctx.strokeRect(coordinates.startX, coordinates.startY, width, height);
   };
 
-  const drawAllRectangles = () => {
+  const drawLabels = () => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    allCoordinates.forEach(coordinates => {
-    const width = coordinates.endX - coordinates.startX;
-    const height = coordinates.endY - coordinates.startY;
-    ctx.strokeRect(coordinates.startX, coordinates.startY, width, height);
+    labels.forEach(label => {
+      const width = label.coordinates.endX - label.coordinates.startX;
+      const height = label.coordinates.endY - label.coordinates.startY;
+      ctx.strokeRect(label.coordinates.startX, label.coordinates.startY, width, height);
     });
   };
 
   useEffect(() => {
-    console.log("HOLA")
-    drawAllRectangles()
-  }, [allCoordinates])
+    drawLabels()
+  }, [labels])
 
   return (
     <div>
@@ -66,7 +68,7 @@ function App() {
       />
       {isDrawing && drawRectangle()}
       
-      {JSON.stringify(allCoordinates)}
+      {JSON.stringify(labels)}
     </div>
   );
 }
