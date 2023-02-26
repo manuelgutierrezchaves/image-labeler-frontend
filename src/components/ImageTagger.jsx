@@ -17,13 +17,13 @@ function ImageTagger({ labels, setLabels, currentImageIndex }) {
 
   const [isDrawing, setIsDrawing] = useState(false);
   const [coordinates, setCoordinates] = useState({startX: 0, startY: 0, endX: 0, endY: 0})
-  const [labelClass, setLabelClass] = useState({})
+  const [labelClass, setLabelClass] = useState(false)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const rectangleCanvasRef = useRef(null);
   const labelsCanvasRef = useRef(null);
 
   const handleMouseDown = (event) => {
-    if (labelClass != {}) {
+    if (labelClass) {
       const { offsetX, offsetY } = event.nativeEvent;
       setIsDrawing(true);
       setCoordinates({ startX: offsetX, startY: offsetY });
@@ -35,8 +35,8 @@ function ImageTagger({ labels, setLabels, currentImageIndex }) {
     if (isDrawing) {
       setCoordinates({...coordinates, endX: offsetX, endY: offsetY });
     }
-    setMousePosition({ x: offsetX, y: offsetY });
     if (!isDrawing) {
+      setMousePosition({ x: offsetX, y: offsetY });
       drawCrosshair();
     }
   };
@@ -50,7 +50,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex }) {
         coordinates: coordinates,
         hover: false}])}
     setIsDrawing(false);
-    setLabelClass({})
+    setLabelClass(false)
     // Clear last rectangle on drawing canvas
     rectangleCanvasRef.current.getContext('2d').clearRect(0, 0, 1000000, 1000000);
   };
