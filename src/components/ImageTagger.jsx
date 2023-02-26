@@ -2,9 +2,16 @@ import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useState, useEffect, useRef } from 'react';
 import "../styles/ImageTagger.css"
+import image1 from '../images/1.jpg';
+import image2 from '../images/2.jpg';
+import image3 from '../images/3.jpg';
+import image4 from '../images/4.jpg';
+import image5 from '../images/5.jpg';
+
+const images = [image1, image2, image3, image4, image5]
 
 
-function ImageTagger({ labels, setLabels }) {
+function ImageTagger({ labels, setLabels, currentImageIndex }) {
 
   const classes = [{"name": "manzana", "color": "red"}, {"name": "pera", "color": "green"}, {"name": "platano", "color": "yellow"}]
 
@@ -71,21 +78,23 @@ function ImageTagger({ labels, setLabels }) {
 
   return (
   <div className="image-labeling">
-    <img src={require("../images/example.jpg")} alt="Image" />
-    <canvas
-      ref={labelsCanvasRef}
-      width={600}
-      height={400}
-    />
-    <canvas
-      ref={rectangleCanvasRef}
-      width={600}
-      height={400}
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseOut={handleMouseUp}
-    />
+    <div className="image-canvas">
+      <img src={images[currentImageIndex]} alt="Image" />
+      <canvas
+        ref={labelsCanvasRef}
+        width={600}
+        height={400}
+      />
+      <canvas
+        ref={rectangleCanvasRef}
+        width={600}
+        height={400}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseOut={handleMouseUp}
+      />
+    </div>
 
     <div>
       {classes.map((classObj, index) => (
