@@ -44,4 +44,5 @@ div {
 
 .main-container {
   display: flex;
+  user-select: none;
 }
