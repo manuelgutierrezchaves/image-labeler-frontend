@@ -15,6 +15,24 @@ function Menu({ labels, setLabels }) {
     setLabels(labels.filter(label => label.id_label !== id));
   }
 
+  const handleMouseEnter = (id) => {
+    const newLabels = [...labels];
+    const label = newLabels.find(l => l.id_label === id);
+    if (label) {
+      label.hover = true;
+      setLabels(newLabels);
+    }
+  };
+
+  const handleMouseLeave = (id) => {
+    const newLabels = [...labels];
+    const label = newLabels.find(l => l.id_label === id);
+    if (label) {
+      label.hover = false;
+      setLabels(newLabels);
+    }
+  };
+
   return (
     <div className="labels-menu">
       <h1>Labels</h1>
@@ -23,10 +41,16 @@ function Menu({ labels, setLabels }) {
           <li key={name}>
             <h2>{name}</h2>
             <ul>
-              {groups[name].map(fruit => (
-                <li key={fruit.id_label} style={{ backgroundColor: fruit.color }}>
-                  ({fruit.coordinates.startX},{fruit.coordinates.startY}) - ({fruit.coordinates.endX},{fruit.coordinates.endY})
-                  <button onClick={() => handleDelete(fruit.id_label)}>X</button>
+              {groups[name].map(label => (
+                <li
+                  key={label.id_label}
+                  style={{ backgroundColor: label.color }}
+                  onMouseEnter={() => handleMouseEnter(label.id_label)}
+                  onMouseLeave={() => handleMouseLeave(label.id_label)}
+                >
+                  ({label.coordinates.startX},{label.coordinates.startY}) - 
+                    ({label.coordinates.endX},{label.coordinates.endY})
+                  <button onClick={() => handleDelete(label.id_label)}>X</button>
                 </li>
               ))}
             </ul>

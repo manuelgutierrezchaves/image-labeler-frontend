@@ -34,7 +34,8 @@ function ImageTagger({ labels, setLabels }) {
         id_label: uuidv4(),
         name: labelClass.name,
         color: labelClass.color,
-        coordinates: coordinates}])}
+        coordinates: coordinates,
+        hover: false}])}
     setIsDrawing(false);
     setLabelClass({})
     // Clear last rectangle on drawing canvas
@@ -58,7 +59,8 @@ function ImageTagger({ labels, setLabels }) {
     labels.forEach(label => {
       const width = label.coordinates.endX - label.coordinates.startX;
       const height = label.coordinates.endY - label.coordinates.startY;
-      ctx.strokeStyle = label.color
+      ctx.strokeStyle = label.hover ? "#fff" : label.color
+      ctx.lineWidth = label.hover ? 4 : 1
       ctx.strokeRect(label.coordinates.startX, label.coordinates.startY, width, height);
     });
   };

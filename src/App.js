@@ -12,13 +12,10 @@ function App() {
         labels={labels}
         setLabels={setLabels}
       />
-      <div className="labels-menu">
-        <Menu 
-          labels={labels}
-          setLabels={setLabels}
-        />
-      </div>
-
+      <Menu
+        labels={labels}
+        setLabels={setLabels}
+      />
     </div>
   );
 }
