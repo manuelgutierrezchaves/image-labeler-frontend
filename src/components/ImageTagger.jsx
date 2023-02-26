@@ -37,6 +37,8 @@ function ImageTagger({ labels, setLabels }) {
         coordinates: coordinates}])}
     setIsDrawing(false);
     setLabelClass({})
+    // Clear last rectangle on drawing canvas
+    rectangleCanvasRef.current.getContext('2d').clearRect(0, 0, 1000000, 1000000);
   };
 
   const drawRectangle = () => {
