@@ -18,6 +18,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex }) {
   const [isDrawing, setIsDrawing] = useState(false);
   const [coordinates, setCoordinates] = useState({startX: 0, startY: 0, endX: 0, endY: 0})
   const [labelClass, setLabelClass] = useState({})
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const rectangleCanvasRef = useRef(null);
   const labelsCanvasRef = useRef(null);
 
@@ -32,7 +33,12 @@ function ImageTagger({ labels, setLabels, currentImageIndex }) {
   const handleMouseMove = (event) => {
     const { offsetX, offsetY } = event.nativeEvent;
     if (isDrawing) {
-      setCoordinates({...coordinates, endX: offsetX, endY: offsetY })}
+      setCoordinates({...coordinates, endX: offsetX, endY: offsetY });
+    }
+    setMousePosition({ x: offsetX, y: offsetY });
+    if (!isDrawing) {
+      drawCrosshair();
+    }
   };
 
   const handleMouseUp = () => {
@@ -47,6 +53,10 @@ function ImageTagger({ labels, setLabels, currentImageIndex }) {
     setLabelClass({})
     // Clear last rectangle on drawing canvas
     rectangleCanvasRef.current.getContext('2d').clearRect(0, 0, 1000000, 1000000);
+  };
+  
+  const handleMouseLeave = () => {
+    setMousePosition({ x: 0, y: 0 })
   };
 
   const drawRectangle = () => {
@@ -66,10 +76,25 @@ function ImageTagger({ labels, setLabels, currentImageIndex }) {
     labels.forEach(label => {
       const width = label.coordinates.endX - label.coordinates.startX;
       const height = label.coordinates.endY - label.coordinates.startY;
-      ctx.strokeStyle = label.hover ? "#fff" : label.color
+      ctx.strokeStyle = label.color
       ctx.lineWidth = label.hover ? 4 : 1
       ctx.strokeRect(label.coordinates.startX, label.coordinates.startY, width, height);
     });
+  };
+  
+  const drawCrosshair = () => {
+    const canvas = rectangleCanvasRef.current;
+    const ctx = canvas.getContext('2d');
+    const size = 10000;
+    const { x, y } = mousePosition;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = 'white';
+    ctx.beginPath();
+    ctx.moveTo(x - size, y);
+    ctx.lineTo(x + size, y);
+    ctx.moveTo(x, y - size);
+    ctx.lineTo(x, y + size);
+    ctx.stroke();
   };
 
   useEffect(() => {
@@ -93,6 +118,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex }) {
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseOut={handleMouseUp}
+        onMouseLeave={handleMouseLeave}
       />
     </div>
 
@@ -113,7 +139,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex }) {
     </div>
 
     {isDrawing && drawRectangle()}
-    {JSON.stringify(labels)}
+    {/* {JSON.stringify(labels)} */}
   </div>
   )
 }
