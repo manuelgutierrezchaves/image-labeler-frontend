@@ -11,7 +11,8 @@ function ImageTagger({ labels, setLabels }) {
   const [isDrawing, setIsDrawing] = useState(false);
   const [coordinates, setCoordinates] = useState({startX: 0, startY: 0, endX: 0, endY: 0})
   const [labelClass, setLabelClass] = useState({})
-  const canvasRef = useRef(null);
+  const rectangleCanvasRef = useRef(null);
+  const labelsCanvasRef = useRef(null);
 
   const handleMouseDown = (event) => {
     if (labelClass != {}) {
@@ -39,7 +40,7 @@ function ImageTagger({ labels, setLabels }) {
   };
 
   const drawRectangle = () => {
-    const canvas = canvasRef.current;
+    const canvas = rectangleCanvasRef.current;
     const ctx = canvas.getContext('2d');
     const width = coordinates.endX - coordinates.startX;
     const height = coordinates.endY - coordinates.startY;
@@ -49,7 +50,7 @@ function ImageTagger({ labels, setLabels }) {
   };
 
   const drawLabels = () => {
-    const canvas = canvasRef.current;
+    const canvas = labelsCanvasRef.current;
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     labels.forEach(label => {
@@ -68,7 +69,12 @@ function ImageTagger({ labels, setLabels }) {
   <div className="image-labeling">
     <img src={require("../images/example.jpg")} alt="Image" />
     <canvas
-      ref={canvasRef}
+      ref={labelsCanvasRef}
+      width={600}
+      height={400}
+    />
+    <canvas
+      ref={rectangleCanvasRef}
       width={600}
       height={400}
       onMouseDown={handleMouseDown}
