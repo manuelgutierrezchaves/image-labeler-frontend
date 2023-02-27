@@ -21,6 +21,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const rectangleCanvasRef = useRef(null);
   const labelsCanvasRef = useRef(null);
+  const selectedLabelCanvasRef = useRef(null);
 
   const handleMouseDown = (event) => {
     if (labelClass) {
@@ -37,7 +38,11 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
         
         if (offsetX >= rectX && offsetX <= rectX + rectWidth &&
             offsetY >= rectY && offsetY <= rectY + rectHeight) {
-          setIdSelectedLabel(label.id_label)
+          if (idSelectedLabel === label.id_label) {
+            setIdSelectedLabel(null)
+          } else {
+            setIdSelectedLabel(label.id_label)
+          }
         }
       })
       // Comprobar si esta dentro de algun label
@@ -88,11 +93,28 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     labels.forEach(label => {
-      const width = label.coordinates.endX - label.coordinates.startX;
-      const height = label.coordinates.endY - label.coordinates.startY;
-      ctx.strokeStyle = label.id_label === idSelectedLabel ? "#FFFFFF" : label.color
-      ctx.lineWidth = label.hover ? 4 : 1
-      ctx.strokeRect(label.coordinates.startX, label.coordinates.startY, width, height);
+      if (label.id_label !== idSelectedLabel) {
+        const width = label.coordinates.endX - label.coordinates.startX;
+        const height = label.coordinates.endY - label.coordinates.startY;
+        ctx.strokeStyle = label.color
+        ctx.lineWidth = label.hover ? 4 : 1
+        ctx.strokeRect(label.coordinates.startX, label.coordinates.startY, width, height);
+      }
+    });
+  };
+
+  const drawSelectedLabel = () => {
+    const canvas = selectedLabelCanvasRef.current;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    labels.forEach(label => {
+      if (label.id_label === idSelectedLabel) {
+        const width = label.coordinates.endX - label.coordinates.startX;
+        const height = label.coordinates.endY - label.coordinates.startY;
+        ctx.strokeStyle = "#FFFFFF"
+        ctx.lineWidth = label.hover ? 8 : 4
+        ctx.strokeRect(label.coordinates.startX, label.coordinates.startY, width, height);
+      }
     });
   };
   
@@ -113,6 +135,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
 
   useEffect(() => {
     drawLabels()
+    drawSelectedLabel()
   }, [labels, idSelectedLabel])
 
   return (
@@ -121,6 +144,11 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
       <img src={images[currentImageIndex]} alt="Image" />
       <canvas
         ref={labelsCanvasRef}
+        width={600}
+        height={400}
+      />
+      <canvas
+        ref={selectedLabelCanvasRef}
         width={600}
         height={400}
       />
