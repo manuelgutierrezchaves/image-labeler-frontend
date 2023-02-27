@@ -1,7 +1,7 @@
 import React from 'react';
 import "../styles/Menu.css"
 
-function Menu({ labels, setLabels }) {
+function Menu({ labels, setLabels, idSelectedLabel, setIdSelectedLabel }) {
 
   const groups = labels.reduce((acc, curr) => {
     if (!acc[curr.name]) {
@@ -33,6 +33,14 @@ function Menu({ labels, setLabels }) {
     }
   };
 
+  const handleMouseClick = (id) => {
+    if (idSelectedLabel === id) {
+      setIdSelectedLabel(null)
+    } else {
+      setIdSelectedLabel(id)
+    }
+  }
+
   return (
     <div className="labels-menu">
       <h1>Labels</h1>
@@ -47,6 +55,7 @@ function Menu({ labels, setLabels }) {
                   style={{ backgroundColor: label.color }}
                   onMouseEnter={() => handleMouseEnter(label.id_label)}
                   onMouseLeave={() => handleMouseLeave(label.id_label)}
+                  onClick={() => handleMouseClick(label.id_label)}
                 >
                   ({label.coordinates.startX},{label.coordinates.startY}) - 
                     ({label.coordinates.endX},{label.coordinates.endY})

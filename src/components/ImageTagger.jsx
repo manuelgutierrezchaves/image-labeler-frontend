@@ -11,7 +11,7 @@ import image5 from '../images/5.jpg';
 const images = [image1, image2, image3, image4, image5]
 
 
-function ImageTagger({ labels, setLabels, currentImageIndex }) {
+function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel }) {
 
   const classes = [{"name": "manzana", "color": "red"}, {"name": "pera", "color": "green"}, {"name": "platano", "color": "yellow"}]
 
@@ -76,7 +76,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex }) {
     labels.forEach(label => {
       const width = label.coordinates.endX - label.coordinates.startX;
       const height = label.coordinates.endY - label.coordinates.startY;
-      ctx.strokeStyle = label.color
+      ctx.strokeStyle = label.id_label === idSelectedLabel ? "#FFFFFF" : label.color
       ctx.lineWidth = label.hover ? 4 : 1
       ctx.strokeRect(label.coordinates.startX, label.coordinates.startY, width, height);
     });
@@ -139,7 +139,6 @@ function ImageTagger({ labels, setLabels, currentImageIndex }) {
     </div>
 
     {isDrawing && drawRectangle()}
-    {/* {JSON.stringify(labels)} */}
   </div>
   )
 }
