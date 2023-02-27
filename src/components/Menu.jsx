@@ -12,23 +12,26 @@ function Menu({ labels, setLabels, idSelectedLabel, setIdSelectedLabel }) {
   }, {});
 
   const handleDelete = (id) => {
-    setLabels(labels.filter(label => label.id_label !== id));
+    setLabels(labels.filter(label => label.id !== id));
+    if (id === idSelectedLabel) {
+      setIdSelectedLabel(null)
+    }
   }
 
   const handleMouseEnter = (id) => {
     const newLabels = [...labels];
-    const label = newLabels.find(l => l.id_label === id);
+    const label = newLabels.find(l => l.id === id);
     if (label) {
-      label.hover = true;
+      label.updateHover(true);
       setLabels(newLabels);
     }
   };
 
   const handleMouseLeave = (id) => {
     const newLabels = [...labels];
-    const label = newLabels.find(l => l.id_label === id);
+    const label = newLabels.find(l => l.id === id);
     if (label) {
-      label.hover = false;
+      label.updateHover(false);
       setLabels(newLabels);
     }
   };
@@ -51,15 +54,15 @@ function Menu({ labels, setLabels, idSelectedLabel, setIdSelectedLabel }) {
             <ul>
               {groups[name].map(label => (
                 <li
-                  key={label.id_label}
+                  key={label.id}
                   style={{ backgroundColor: label.color }}
-                  onMouseEnter={() => handleMouseEnter(label.id_label)}
-                  onMouseLeave={() => handleMouseLeave(label.id_label)}
-                  onClick={() => handleMouseClick(label.id_label)}
+                  onMouseEnter={() => handleMouseEnter(label.id)}
+                  onMouseLeave={() => handleMouseLeave(label.id)}
+                  onClick={() => handleMouseClick(label.id)}
                 >
                   ({label.coordinates.startX},{label.coordinates.startY}) - 
                     ({label.coordinates.endX},{label.coordinates.endY})
-                  <button onClick={() => handleDelete(label.id_label)}>X</button>
+                  <button onClick={() => handleDelete(label.id)}>X</button>
                 </li>
               ))}
             </ul>

@@ -1,7 +1,7 @@
 import React from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { useState, useEffect, useRef } from 'react';
 import "../styles/ImageTagger.css"
+import LabelModel from '../objects/LabelModel';
 import image1 from '../images/1.jpg';
 import image2 from '../images/2.jpg';
 import image3 from '../images/3.jpg';
@@ -9,7 +9,6 @@ import image4 from '../images/4.jpg';
 import image5 from '../images/5.jpg';
 
 const images = [image1, image2, image3, image4, image5]
-
 
 function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, setIdSelectedLabel }) {
 
@@ -38,14 +37,13 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
         
         if (offsetX >= rectX && offsetX <= rectX + rectWidth &&
             offsetY >= rectY && offsetY <= rectY + rectHeight) {
-          if (idSelectedLabel === label.id_label) {
+          if (idSelectedLabel === label.id) {
             setIdSelectedLabel(null)
           } else {
-            setIdSelectedLabel(label.id_label)
+            setIdSelectedLabel(label.id)
           }
         }
       })
-      // Comprobar si esta dentro de algun label
     }
   };
 
@@ -62,13 +60,13 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
 
   const handleMouseUp = () => {
     if (isDrawing) {
-      setLabels([...labels, {
-        id_label: uuidv4(),
-        name: labelClass.name,
-        color: labelClass.color,
-        coordinates: coordinates,
-        hover: false}])}
-    setIsDrawing(false);
+      const newLabel = new LabelModel(
+        labelClass.name,
+        labelClass.color,
+        coordinates,
+        false)
+      setLabels([...labels, newLabel])}
+    setIsDrawing(false)
     setLabelClass(false)
     // Clear last rectangle on drawing canvas
     rectangleCanvasRef.current.getContext('2d').clearRect(0, 0, 1000000, 1000000);
@@ -93,7 +91,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     labels.forEach(label => {
-      if (label.id_label !== idSelectedLabel) {
+      if (label.id !== idSelectedLabel) {
         const width = label.coordinates.endX - label.coordinates.startX;
         const height = label.coordinates.endY - label.coordinates.startY;
         ctx.strokeStyle = label.color
@@ -108,7 +106,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     labels.forEach(label => {
-      if (label.id_label === idSelectedLabel) {
+      if (label.id === idSelectedLabel) {
         const width = label.coordinates.endX - label.coordinates.startX;
         const height = label.coordinates.endY - label.coordinates.startY;
         ctx.strokeStyle = label.color
@@ -136,10 +134,10 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
   const handleClickClasses = (classObj) => {
     if (idSelectedLabel != null) {
       const newLabels = [...labels];
-      const label = newLabels.find(l => l.id_label === idSelectedLabel);
+      const label = newLabels.find(l => l.id === idSelectedLabel);
       if (label) {
-        label.name = classObj.name;
-        label.color = classObj.color;
+        label.updateName(classObj.name)
+        label.updateColor(classObj.color)
         setLabels(newLabels);
       }
     } else {
