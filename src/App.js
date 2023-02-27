@@ -6,6 +6,7 @@ import ImageTagger from './components/ImageTagger';
 function App() {
   const [labels, setLabels] = useState([])
   const [idSelectedLabel, setIdSelectedLabel] = useState(null)
+  const [idHoverLabel, setIdHoverLabel] = useState(null)
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const finishTask = () => {
@@ -28,18 +29,21 @@ function App() {
           currentImageIndex={currentImageIndex}
           idSelectedLabel={idSelectedLabel}
           setIdSelectedLabel={setIdSelectedLabel}
+          idHoverLabel={idHoverLabel}
         />
         <Menu
           labels={labels}
           setLabels={setLabels}
           idSelectedLabel={idSelectedLabel}
           setIdSelectedLabel={setIdSelectedLabel}
+          setIdHoverLabel={setIdHoverLabel}
         />
       </div>
       <button onClick={finishTask}>Send</button>
       <p>
         -------------------------- DEBUG ZONE -------------------------- <br/><br/>
         Selected ID: {JSON.stringify(idSelectedLabel)} <br/><br/>
+        Hover ID: {JSON.stringify(idHoverLabel)} <br/><br/>
         ARRAY of labels: {JSON.stringify(labels)} <br/><br/>
       </p>
     </div>

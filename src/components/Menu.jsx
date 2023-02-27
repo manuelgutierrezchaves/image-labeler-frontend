@@ -1,7 +1,7 @@
 import React from 'react';
 import "../styles/Menu.css"
 
-function Menu({ labels, setLabels, idSelectedLabel, setIdSelectedLabel }) {
+function Menu({ labels, setLabels, idSelectedLabel, setIdSelectedLabel, setIdHoverLabel }) {
 
   const groups = labels.reduce((acc, curr) => {
     if (!acc[curr.name]) {
@@ -17,24 +17,6 @@ function Menu({ labels, setLabels, idSelectedLabel, setIdSelectedLabel }) {
       setIdSelectedLabel(null)
     }
   }
-
-  const handleMouseEnter = (id) => {
-    const newLabels = [...labels];
-    const label = newLabels.find(l => l.id === id);
-    if (label) {
-      label.updateHover(true);
-      setLabels(newLabels);
-    }
-  };
-
-  const handleMouseLeave = (id) => {
-    const newLabels = [...labels];
-    const label = newLabels.find(l => l.id === id);
-    if (label) {
-      label.updateHover(false);
-      setLabels(newLabels);
-    }
-  };
 
   const handleMouseClick = (id) => {
     if (idSelectedLabel === id) {
@@ -56,8 +38,8 @@ function Menu({ labels, setLabels, idSelectedLabel, setIdSelectedLabel }) {
                 <li
                   key={label.id}
                   style={{ backgroundColor: label.color }}
-                  onMouseEnter={() => handleMouseEnter(label.id)}
-                  onMouseLeave={() => handleMouseLeave(label.id)}
+                  onMouseEnter={() => setIdHoverLabel(label.id)}
+                  onMouseLeave={() => setIdHoverLabel(null)}
                   onClick={() => handleMouseClick(label.id)}
                 >
                   ({label.coordinates.startX},{label.coordinates.startY}) - 

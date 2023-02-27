@@ -1,12 +1,11 @@
 import { v4 as uuidv4 } from 'uuid';
 
 class LabelModel {
-  constructor(name, color, coordinates, hover) {
+  constructor(name, color, coordinates) {
     this.id = uuidv4();
     this.name = name;
     this.color = color;
     this.coordinates = coordinates;
-    this.hover = hover;
   }
 
   updateName(name) {
@@ -17,17 +16,11 @@ class LabelModel {
     this.color = color;
   }
 
-  updateHover(hover) {
-    this.hover = hover;
-  }
-
   static fromJson(json) {
     return new LabelModel(
-      json.id,
       json.name,
       json.color,
-      json.coordinates,
-      json.hover
+      json.coordinates
     );
   }
 
@@ -36,8 +29,7 @@ class LabelModel {
       id: label.id,
       name: label.name,
       color: label.color,
-      coordinates: label.coordinates,
-      hover: label.hover
+      coordinates: label.coordinates
     });
   }
 }

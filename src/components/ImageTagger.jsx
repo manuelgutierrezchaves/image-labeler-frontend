@@ -10,7 +10,7 @@ import image5 from '../images/5.jpg';
 
 const images = [image1, image2, image3, image4, image5]
 
-function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, setIdSelectedLabel }) {
+function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, setIdSelectedLabel, idHoverLabel }) {
 
   const classes = [{"name": "manzana", "color": "red"}, {"name": "pera", "color": "green"}, {"name": "platano", "color": "yellow"}]
 
@@ -95,7 +95,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
         const width = label.coordinates.endX - label.coordinates.startX;
         const height = label.coordinates.endY - label.coordinates.startY;
         ctx.strokeStyle = label.color
-        ctx.lineWidth = label.hover ? 8 : 1
+        ctx.lineWidth = label.id === idHoverLabel ? 8 : 1
         ctx.strokeRect(label.coordinates.startX, label.coordinates.startY, width, height);
       }
     });
@@ -110,7 +110,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
         const width = label.coordinates.endX - label.coordinates.startX;
         const height = label.coordinates.endY - label.coordinates.startY;
         ctx.strokeStyle = label.color
-        ctx.lineWidth = label.hover ? 8 : 4
+        ctx.lineWidth = label.id === idHoverLabel ? 8 : 4
         ctx.strokeRect(label.coordinates.startX, label.coordinates.startY, width, height);
       }
     });
@@ -148,7 +148,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
   useEffect(() => {
     drawLabels()
     drawSelectedLabel()
-  }, [labels, idSelectedLabel])
+  }, [labels, idSelectedLabel, idHoverLabel])
 
   return (
   <div className="image-labeling">
