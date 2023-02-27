@@ -97,7 +97,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
         const width = label.coordinates.endX - label.coordinates.startX;
         const height = label.coordinates.endY - label.coordinates.startY;
         ctx.strokeStyle = label.color
-        ctx.lineWidth = label.hover ? 4 : 1
+        ctx.lineWidth = label.hover ? 8 : 1
         ctx.strokeRect(label.coordinates.startX, label.coordinates.startY, width, height);
       }
     });
@@ -111,7 +111,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
       if (label.id_label === idSelectedLabel) {
         const width = label.coordinates.endX - label.coordinates.startX;
         const height = label.coordinates.endY - label.coordinates.startY;
-        ctx.strokeStyle = "#FFFFFF"
+        ctx.strokeStyle = label.color
         ctx.lineWidth = label.hover ? 8 : 4
         ctx.strokeRect(label.coordinates.startX, label.coordinates.startY, width, height);
       }
@@ -132,6 +132,20 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
     ctx.lineTo(x, y + size);
     ctx.stroke();
   };
+
+  const handleClickClasses = (classObj) => {
+    if (idSelectedLabel != null) {
+      const newLabels = [...labels];
+      const label = newLabels.find(l => l.id_label === idSelectedLabel);
+      if (label) {
+        label.name = classObj.name;
+        label.color = classObj.color;
+        setLabels(newLabels);
+      }
+    } else {
+      setLabelClass(classObj)
+    }
+  }
 
   useEffect(() => {
     drawLabels()
@@ -172,7 +186,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
             backgroundColor: classObj.color,
             border: labelClass.name === classObj.name ? '2px solid black' : 'none'
           }}
-          onClick={() => setLabelClass(classObj)}
+          onClick={() => handleClickClasses(classObj)}
         >
           {labelClass.name === classObj.name && <span>✔️ </span>}
           {classObj.name}
