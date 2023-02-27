@@ -5,7 +5,7 @@ import ImageTagger from './components/ImageTagger';
 
 function App() {
   const [labels, setLabels] = useState([])
-  const [idSelectedLabel, setIdSelectedLabel] = useState(0)
+  const [idSelectedLabel, setIdSelectedLabel] = useState(null)
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const finishTask = () => {
@@ -16,6 +16,7 @@ function App() {
     }
     // Post labels to server
     setLabels([])
+    setIdSelectedLabel(null)
   };
   
   return (
