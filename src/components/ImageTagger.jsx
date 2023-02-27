@@ -11,7 +11,7 @@ import image5 from '../images/5.jpg';
 const images = [image1, image2, image3, image4, image5]
 
 
-function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel }) {
+function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, setIdSelectedLabel }) {
 
   const classes = [{"name": "manzana", "color": "red"}, {"name": "pera", "color": "green"}, {"name": "platano", "color": "yellow"}]
 
@@ -27,6 +27,20 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel }) 
       const { offsetX, offsetY } = event.nativeEvent;
       setIsDrawing(true);
       setCoordinates({ startX: offsetX, startY: offsetY });
+    } else {
+      const { offsetX, offsetY } = event.nativeEvent;
+      labels.forEach(label => {
+        const rectX = Math.min(label.coordinates.startX, label.coordinates.endX);
+        const rectY = Math.min(label.coordinates.startY, label.coordinates.endY);
+        const rectWidth = Math.abs(label.coordinates.endX - label.coordinates.startX);
+        const rectHeight = Math.abs(label.coordinates.endY - label.coordinates.startY);
+        
+        if (offsetX >= rectX && offsetX <= rectX + rectWidth &&
+            offsetY >= rectY && offsetY <= rectY + rectHeight) {
+          setIdSelectedLabel(label.id_label)
+        }
+      })
+      // Comprobar si esta dentro de algun label
     }
   };
 
@@ -99,7 +113,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel }) 
 
   useEffect(() => {
     drawLabels()
-  }, [labels])
+  }, [labels, idSelectedLabel])
 
   return (
   <div className="image-labeling">

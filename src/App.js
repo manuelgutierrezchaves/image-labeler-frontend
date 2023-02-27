@@ -27,6 +27,7 @@ function App() {
           setLabels={setLabels}
           currentImageIndex={currentImageIndex}
           idSelectedLabel={idSelectedLabel}
+          setIdSelectedLabel={setIdSelectedLabel}
         />
         <Menu
           labels={labels}
@@ -37,7 +38,7 @@ function App() {
       </div>
       <button onClick={finishTask}>Send</button>
       <p>
-        DEBUG ZONE <br/><br/>
+        -------------------------- DEBUG ZONE -------------------------- <br/><br/>
         Selected ID: {JSON.stringify(idSelectedLabel)} <br/><br/>
         ARRAY of labels: {JSON.stringify(labels)} <br/><br/>
       </p>
