@@ -1,7 +1,7 @@
 import React from 'react';
 import "../styles/Menu.css"
 
-function Menu({ labels, setLabels, idSelectedLabel, setIdSelectedLabel, setIdHoverLabel }) {
+function Menu({ labels, setLabels, idSelectedLabel, setIdSelectedLabel, idHoverLabel, setIdHoverLabel }) {
 
   const groups = labels.reduce((acc, curr) => {
     if (!acc[curr.name]) {
@@ -13,8 +13,11 @@ function Menu({ labels, setLabels, idSelectedLabel, setIdSelectedLabel, setIdHov
 
   const handleDelete = (id) => {
     setLabels(labels.filter(label => label.id !== id));
-    if (id === idSelectedLabel) {
+    if (idSelectedLabel === id) {
       setIdSelectedLabel(null)
+    }
+    if (idHoverLabel === id) {
+      setIdHoverLabel(null)
     }
   }
 
@@ -35,17 +38,19 @@ function Menu({ labels, setLabels, idSelectedLabel, setIdSelectedLabel, setIdHov
             <h2>{name}</h2>
             <ul>
               {groups[name].map(label => (
-                <li
-                  key={label.id}
-                  style={{ backgroundColor: label.color }}
-                  onMouseEnter={() => setIdHoverLabel(label.id)}
-                  onMouseLeave={() => setIdHoverLabel(null)}
-                  onClick={() => handleMouseClick(label.id)}
-                >
-                  ({label.coordinates.startX},{label.coordinates.startY}) - 
-                    ({label.coordinates.endX},{label.coordinates.endY})
-                  <button onClick={() => handleDelete(label.id)}>X</button>
-                </li>
+                <div className="coordinates-x">
+                  <li
+                    key={label.id}
+                    style={{ backgroundColor: label.color }}
+                    onMouseEnter={() => setIdHoverLabel(label.id)}
+                    onMouseLeave={() => setIdHoverLabel(null)}
+                    onClick={() => handleMouseClick(label.id)}
+                  >
+                    ({label.coordinates.startX},{label.coordinates.startY}) - 
+                      ({label.coordinates.endX},{label.coordinates.endY})
+                  </li>
+                    <button onClick={() => handleDelete(label.id)}>X</button>
+                </div>
               ))}
             </ul>
           </li>

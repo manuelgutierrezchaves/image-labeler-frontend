@@ -1,3 +1,7 @@
 .labels-menu {
     padding: 20px;
 }
+
+.coordinates-x {
+    display: flex;
+}

@@ -36,6 +36,7 @@ function App() {
           setLabels={setLabels}
           idSelectedLabel={idSelectedLabel}
           setIdSelectedLabel={setIdSelectedLabel}
+          idHoverLabel={idHoverLabel}
           setIdHoverLabel={setIdHoverLabel}
         />
       </div>
