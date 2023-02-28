@@ -8,6 +8,7 @@ img {
   width: 600px;
   height: 400px;
   position: relative;
+  border: solid black 2px
 }
 
 canvas {
