@@ -191,7 +191,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
 
   return (
   <div className="image-labeling">
-    <div className="image-canvas">
+    <div className={labelMove ? "image-canvas label-move" : "image-canvas"}>
       <img src={images[currentImageIndex]} alt="Image" />
       <canvas
         ref={labelsCanvasRef}

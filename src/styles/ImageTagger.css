@@ -3,6 +3,10 @@
   max-width: 600px;
 }
 
+.label-move {
+  cursor: move;
+}
+
 
 img {
   width: 600px;
