@@ -49,7 +49,7 @@ function Menu({ labels, setLabels, idSelectedLabel, setIdSelectedLabel, idHoverL
                     ({label.coordinates.startX},{label.coordinates.startY}) - 
                       ({label.coordinates.endX},{label.coordinates.endY})
                   </li>
-                    <button onClick={() => handleDelete(label.id)}>X</button>
+                  <button onClick={() => handleDelete(label.id)}>X</button>
                 </div>
               ))}
             </ul>
