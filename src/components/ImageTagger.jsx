@@ -25,6 +25,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
   const rectangleCanvasRef = useRef(null);
   const labelsCanvasRef = useRef(null);
   const selectedLabelCanvasRef = useRef(null);
+  const crossHairCanvasRef = useRef(null)
 
   const handleMouseDown = (event) => {
     if (labelClass) {
@@ -53,12 +54,10 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
 
   const handleMouseMove = (event) => {
     const { offsetX, offsetY } = event.nativeEvent;
-    if (isDrawing) {
+    drawCrosshair();
+    setMousePosition({ x: offsetX, y: offsetY });
+      if (isDrawing) {
       setCoordinates({...coordinates, endX: offsetX, endY: offsetY });
-    }
-    if (!isDrawing) {
-      setMousePosition({ x: offsetX, y: offsetY });
-      drawCrosshair();
     }
   };
 
@@ -80,6 +79,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
   
   const handleMouseLeave = () => {
     setMousePosition({ x: 0, y: 0 })
+    crossHairCanvasRef.current.getContext('2d').clearRect(0, 0, 1000000, 1000000);
   };
 
   const drawRectangle = () => {
@@ -123,12 +123,12 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
   };
   
   const drawCrosshair = () => {
-    const canvas = rectangleCanvasRef.current;
+    const canvas = crossHairCanvasRef.current;
     const ctx = canvas.getContext('2d');
     const size = 10000;
     const { x, y } = mousePosition;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = 'white';
+    ctx.strokeStyle = 'black';
     ctx.beginPath();
     ctx.moveTo(x - size, y);
     ctx.lineTo(x + size, y);
@@ -171,6 +171,11 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
       />
       <canvas
         ref={selectedLabelCanvasRef}
+        width={600}
+        height={400}
+      />
+      <canvas
+        ref={crossHairCanvasRef}
         width={600}
         height={400}
       />
