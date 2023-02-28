@@ -62,7 +62,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
     }
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = (out) => {
     if (isDrawing) {
       const newLabel = new LabelModel(
         labelClass.name,
@@ -71,7 +71,9 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
         false)
       setLabels([...labels, newLabel])}
     setIsDrawing(false)
-    setLabelClass(false)
+    if (!out) {
+      setLabelClass(false)
+    }
     // Clear last rectangle on drawing canvas
     rectangleCanvasRef.current.getContext('2d').clearRect(0, 0, 1000000, 1000000);
   };
@@ -174,8 +176,8 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
         height={400}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseOut={handleMouseUp}
+        onMouseUp={() => handleMouseUp(false)}
+        onMouseOut={() => handleMouseUp(true)}
         onMouseLeave={handleMouseLeave}
       />
     </div>
@@ -198,6 +200,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
     </div>
 
     {isDrawing && drawRectangle()}
+    {JSON.stringify(labelClass)}
   </div>
   )
 }
