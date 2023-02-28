@@ -20,7 +20,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
 
   const [isDrawing, setIsDrawing] = useState(false);
   const [coordinates, setCoordinates] = useState({startX: 0, startY: 0, endX: 0, endY: 0})
-  const [labelClass, setLabelClass] = useState(false)
+  const [labelClass, setLabelClass] = useState(null)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const rectangleCanvasRef = useRef(null);
   const labelsCanvasRef = useRef(null);
@@ -65,14 +65,14 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
   const handleMouseUp = (out) => {
     if (isDrawing) {
       const newLabel = new LabelModel(
-        labelClass.name,
-        labelClass.color,
+        labelClass?.name,
+        labelClass?.color,
         coordinates,
         false)
       setLabels([...labels, newLabel])}
     setIsDrawing(false)
     if (!out) {
-      setLabelClass(false)
+      setLabelClass(null)
     }
     // Clear last rectangle on drawing canvas
     rectangleCanvasRef.current.getContext('2d').clearRect(0, 0, 1000000, 1000000);
@@ -88,7 +88,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
     const width = coordinates.endX - coordinates.startX;
     const height = coordinates.endY - coordinates.startY;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = labelClass.color
+    ctx.strokeStyle = labelClass?.color
     ctx.strokeRect(coordinates.startX, coordinates.startY, width, height);
   };
 
@@ -138,7 +138,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
   };
 
   const handleClickClasses = (classObj) => {
-    if (idSelectedLabel != null) {
+    if (idSelectedLabel !== null) {
       const newLabels = [...labels];
       const label = newLabels.find(l => l.id === idSelectedLabel);
       if (label) {
@@ -147,7 +147,11 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
         setLabels(newLabels);
       }
     } else {
-      setLabelClass(classObj)
+      if (labelClass?.name == classObj.name){
+        setLabelClass(null)
+      } else {
+        setLabelClass(classObj)
+      }
     }
   }
 
@@ -189,11 +193,11 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
           style={{
             fontSize: "1.5em",
             backgroundColor: classObj.color,
-            border: labelClass.name === classObj.name ? '2px solid black' : 'none'
+            border: labelClass?.name === classObj.name ? '2px solid black' : 'none'
           }}
           onClick={() => handleClickClasses(classObj)}
         >
-          {labelClass.name === classObj.name && <span>✔️ </span>}
+          {labelClass?.name === classObj.name && <span>✔️ </span>}
           {classObj.name}
         </button>
       ))}
