@@ -207,9 +207,12 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
         </button>
       ))}
     </div>
-
     {isDrawing && drawRectangle()}
-    {JSON.stringify(labelClass)}
+    <p>
+      -------------------------- DEBUG ZONE -------------------------- <br/><br/>
+      Label Class: {JSON.stringify(labelClass)}
+      <br/><br/>--------------------------------------------------------------------------
+    </p>
   </div>
   )
 }
