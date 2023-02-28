@@ -21,6 +21,8 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
   const [isDrawing, setIsDrawing] = useState(false);
   const [coordinates, setCoordinates] = useState({startX: 0, startY: 0, endX: 0, endY: 0})
   const [labelClass, setLabelClass] = useState(null)
+  const [labelMove, setLabelMove] = useState(null)
+  const [moved, setMoved] = useState(false)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const rectangleCanvasRef = useRef(null);
   const labelsCanvasRef = useRef(null);
@@ -42,11 +44,11 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
         
         if (offsetX >= rectX && offsetX <= rectX + rectWidth &&
             offsetY >= rectY && offsetY <= rectY + rectHeight) {
-          if (idSelectedLabel === label.id) {
-            setIdSelectedLabel(null)
-          } else {
-            setIdSelectedLabel(label.id)
-          }
+          setLabelMove({
+            id: label.id,
+            offsetX: offsetX - label.coordinates.startX,
+            offsetY: offsetY - label.coordinates.startY
+          })
         }
       })
     }
@@ -58,8 +60,22 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
     setMousePosition({ x: offsetX, y: offsetY });
       if (isDrawing) {
       setCoordinates({...coordinates, endX: offsetX, endY: offsetY });
+    } else {
+      const newLabels = [...labels];
+      const label = newLabels.find(l => l.id === labelMove.id);
+      if (label) {
+        const newCoordinates = {
+          startX: offsetX - labelMove.offsetX,
+          startY: offsetY - labelMove.offsetY,
+          endX: offsetX - labelMove.offsetX + Math.abs(label.coordinates.endX - label.coordinates.startX),
+          endY: offsetY - labelMove.offsetY + Math.abs(label.coordinates.endY - label.coordinates.startY)
+        }
+        label.updateCoordinates(newCoordinates)
+        setLabels(newLabels);
+        setMoved(true)
+      }
     }
-  };
+  }
 
   const handleMouseUp = (out) => {
     if (isDrawing) {
@@ -72,6 +88,19 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
     setIsDrawing(false)
     if (!out) {
       setLabelClass(null)
+    }
+    setLabelMove(null)
+    if (moved) {
+      setIdSelectedLabel(null)
+      setMoved(false)
+    } else {
+      if (setLabelMove) {
+        if (idSelectedLabel === labelMove.id) {
+          setIdSelectedLabel(null)
+        } else {
+          setIdSelectedLabel(labelMove.id)
+        }
+      }
     }
     // Clear last rectangle on drawing canvas
     rectangleCanvasRef.current.getContext('2d').clearRect(0, 0, 1000000, 1000000);
@@ -210,7 +239,8 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
     {isDrawing && drawRectangle()}
     <p>
       -------------------------- DEBUG ZONE -------------------------- <br/><br/>
-      Label Class: {JSON.stringify(labelClass)}
+      Label Class: {JSON.stringify(labelClass)}  <br/><br/>
+      Move ID: {JSON.stringify(labelMove)}
       <br/><br/>--------------------------------------------------------------------------
     </p>
   </div>

@@ -16,6 +16,10 @@ class LabelModel {
     this.color = color;
   }
 
+  updateCoordinates(coordinates) {
+    this.coordinates = coordinates;
+  }
+
   static fromJson(json) {
     return new LabelModel(
       json.name,
