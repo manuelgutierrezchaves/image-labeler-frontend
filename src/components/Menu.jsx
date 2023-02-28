@@ -41,7 +41,7 @@ function Menu({ labels, setLabels, idSelectedLabel, setIdSelectedLabel, idHoverL
                 <div className="coordinates-x">
                   <li
                     key={label.id}
-                    style={{ backgroundColor: label.color }}
+                    style={{ backgroundColor: label.color, fontSize: "1.5em" }}
                     onMouseEnter={() => setIdHoverLabel(label.id)}
                     onMouseLeave={() => setIdHoverLabel(null)}
                     onClick={() => handleMouseClick(label.id)}

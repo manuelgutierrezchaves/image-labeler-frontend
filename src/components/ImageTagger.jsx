@@ -12,7 +12,11 @@ const images = [image1, image2, image3, image4, image5]
 
 function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, setIdSelectedLabel, idHoverLabel }) {
 
-  const classes = [{"name": "manzana", "color": "red"}, {"name": "pera", "color": "green"}, {"name": "platano", "color": "yellow"}]
+  const classes = [
+    {"name": "manzana", "color": "red"},
+    {"name": "pera", "color": "green"},
+    {"name": "platano", "color": "yellow"},
+    {"name": "limon", "color": "aqua"}]
 
   const [isDrawing, setIsDrawing] = useState(false);
   const [coordinates, setCoordinates] = useState({startX: 0, startY: 0, endX: 0, endY: 0})
@@ -181,6 +185,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
         <button
           key={index}
           style={{
+            fontSize: "1.5em",
             backgroundColor: classObj.color,
             border: labelClass.name === classObj.name ? '2px solid black' : 'none'
           }}
