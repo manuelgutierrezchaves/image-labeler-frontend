@@ -226,7 +226,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
       />
     </div>
 
-    <div>
+    <div className="class-buttons">
       {classes.map((classObj, index) => (
         <button
           key={index}
@@ -243,12 +243,12 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
       ))}
     </div>
     {isDrawing && drawRectangle()}
-    <p>
+    {/* <p>
       -------------------------- DEBUG ZONE -------------------------- <br/><br/>
       Label Class: {JSON.stringify(labelClass)}  <br/><br/>
       Move ID: {JSON.stringify(labelMove)}
       <br/><br/>--------------------------------------------------------------------------
-    </p>
+    </p> */}
   </div>
   )
 }

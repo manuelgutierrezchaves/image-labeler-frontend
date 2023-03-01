@@ -1,22 +1,27 @@
 .image-labeling {
   padding: 20px;
-  max-width: 600px;
 }
 
 .label-move {
   cursor: move;
 }
 
+.image-canvas {
+  border: solid black 2px
+}
 
 img {
   width: 600px;
   height: 400px;
   position: relative;
-  border: solid black 2px
 }
 
 canvas {
   position: absolute;
   top: 0;
   left: 0;
+}
+
+.class-buttons {
+  padding: 10px 0px 10px 0px;
 }
