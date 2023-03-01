@@ -31,7 +31,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
 
   const handleMouseDown = (event) => {
     const { offsetX, offsetY } = event.nativeEvent;
-      if (labelClass) {
+    if (labelClass) {
       setIsDrawing(true);
       setCoordinates({ startX: offsetX, startY: offsetY });
     } else {
@@ -40,7 +40,6 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
         const rectY = Math.min(label.coordinates.startY, label.coordinates.endY);
         const rectWidth = Math.abs(label.coordinates.endX - label.coordinates.startX);
         const rectHeight = Math.abs(label.coordinates.endY - label.coordinates.startY);
-        
         if (offsetX >= rectX && offsetX <= rectX + rectWidth &&
             offsetY >= rectY && offsetY <= rectY + rectHeight) {
           setLabelMove({
@@ -59,9 +58,9 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
     setMousePosition({ x: offsetX, y: offsetY });
     if (isDrawing) {
       setCoordinates({...coordinates, endX: offsetX, endY: offsetY });
-    } else {
+    } else if (labelMove) {
       const newLabels = [...labels];
-      const label = newLabels.find(l => l.id === labelMove?.id);
+      const label = newLabels.find(l => l.id === labelMove.id);
       if (label) {
         const newCoordinates = {
           startX: offsetX - labelMove.offsetX,
@@ -76,45 +75,36 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
     }
   }
 
-  const handleMouseUp = (out) => {
-    if (isDrawing) {
-      rectangleCanvasRef.current.getContext('2d').clearRect(0, 0, 1000000, 1000000);
-      const { startX, startY, endX, endY} = coordinates
-      if (startX > endX) {
-        coordinates.startX = endX
-        coordinates.endX = startX
-      }
-      if (startY > endY) {
-        coordinates.startY = endY
-        coordinates.endY = startY
-      }      
-      const newLabel = new LabelModel(
-        labelClass?.name,
-        labelClass?.color,
-        coordinates,
-        false)
-      setLabels([...labels, newLabel])}
-    setIsDrawing(false)
-    if (!out) {
-      setLabelClass(null)
+  const changeCoordinatesSystem = (coordinates) => {
+    const { startX, startY, endX, endY} = coordinates
+    if (startX > endX) {
+      coordinates.startX = endX
+      coordinates.endX = startX
     }
+    if (startY > endY) {
+      coordinates.startY = endY
+      coordinates.endY = startY
+    }
+  }
+
+  const handleMouseUp = () => {
     setLabelMove(null)
-    if (moved) {
+    if (isDrawing) { // Drawing new label
+      rectangleCanvasRef.current.getContext('2d').clearRect(0, 0, 1000000, 1000000);
+      changeCoordinatesSystem(coordinates)
+      const newLabel = new LabelModel(labelClass.name, labelClass.color, coordinates)
+      setLabels([...labels, newLabel])
+      setIsDrawing(false)
+      setLabelClass(null)
+    } else if (moved) { // Move label
       setMoved(false)
-    } else {
-      if (labelMove) {
-        if (idSelectedLabel === labelMove.id) {
-          setIdSelectedLabel(null)
-        } else {
-          setIdSelectedLabel(labelMove.id)
-        }
-      }
+    } else if (labelMove) { // Select a label
+      setIdSelectedLabel(idSelectedLabel === labelMove.id ? null : labelMove.id)
     }
   };
   
   const handleMouseLeave = () => {
-    setMousePosition({ x: 0, y: 0 })
-    crossHairCanvasRef.current.getContext('2d').clearRect(0, 0, 1000000, 1000000);
+    crossHairCanvasRef.current.getContext('2d').clearRect(0, 0, 10000, 10000);
   };
 
   const drawRectangle = () => {
@@ -195,6 +185,10 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
     drawSelectedLabel()
   }, [labels, idSelectedLabel, idHoverLabel])
 
+  useEffect(() => {
+    drawRectangle()
+  }, [coordinates])
+
   return (
   <div className="image-labeling">
     <div className={labelMove ? "image-canvas label-move" : "image-canvas"}>
@@ -220,8 +214,8 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
         height={400}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
-        onMouseUp={() => handleMouseUp(false)}
-        onMouseOut={() => handleMouseUp(true)}
+        onMouseUp={handleMouseUp}
+        onMouseOut={handleMouseUp}
         onMouseLeave={handleMouseLeave}
       />
     </div>
@@ -242,7 +236,6 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
         </button>
       ))}
     </div>
-    {isDrawing && drawRectangle()}
     <p>
       -------------------------- DEBUG ZONE -------------------------- <br/><br/>
       Label Class: {JSON.stringify(labelClass)}  <br/><br/>
