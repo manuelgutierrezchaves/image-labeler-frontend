@@ -40,7 +40,7 @@ function App() {
           setIdHoverLabel={setIdHoverLabel}
         />
       </div>
-      <button style={{ margin: "20px", padding: "10px" }} onClick={finishTask}>Next image</button>
+      <button style={{ marginLeft: "20px", padding: "10px" }} onClick={finishTask}>Next image</button>
       {/* <p>
         -------------------------- DEBUG ZONE -------------------------- <br/><br/>
         Selected ID: {JSON.stringify(idSelectedLabel)} <br/><br/>
