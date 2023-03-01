@@ -182,7 +182,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
         setLabels(newLabels);
       }
     } else {
-      if (labelClass?.name == classObj.name){
+      if (labelClass?.name === classObj.name){
         setLabelClass(null)
       } else {
         setLabelClass(classObj)
