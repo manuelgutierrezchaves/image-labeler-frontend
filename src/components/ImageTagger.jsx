@@ -78,6 +78,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
 
   const handleMouseUp = (out) => {
     if (isDrawing) {
+      rectangleCanvasRef.current.getContext('2d').clearRect(0, 0, 1000000, 1000000);
       const { startX, startY, endX, endY} = coordinates
       if (startX > endX) {
         coordinates.startX = endX
@@ -109,8 +110,6 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
         }
       }
     }
-    // Clear last rectangle on drawing canvas
-    rectangleCanvasRef.current.getContext('2d').clearRect(0, 0, 1000000, 1000000);
   };
   
   const handleMouseLeave = () => {
