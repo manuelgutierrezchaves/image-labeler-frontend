@@ -57,11 +57,11 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
     const { offsetX, offsetY } = event.nativeEvent;
     drawCrosshair();
     setMousePosition({ x: offsetX, y: offsetY });
-      if (isDrawing) {
+    if (isDrawing) {
       setCoordinates({...coordinates, endX: offsetX, endY: offsetY });
     } else {
       const newLabels = [...labels];
-      const label = newLabels.find(l => l.id === labelMove.id);
+      const label = newLabels.find(l => l.id === labelMove?.id);
       if (label) {
         const newCoordinates = {
           startX: offsetX - labelMove.offsetX,
@@ -102,7 +102,7 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
     if (moved) {
       setMoved(false)
     } else {
-      if (setLabelMove) {
+      if (labelMove) {
         if (idSelectedLabel === labelMove.id) {
           setIdSelectedLabel(null)
         } else {
