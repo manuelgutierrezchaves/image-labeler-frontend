@@ -30,12 +30,11 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
   const crossHairCanvasRef = useRef(null)
 
   const handleMouseDown = (event) => {
-    if (labelClass) {
-      const { offsetX, offsetY } = event.nativeEvent;
+    const { offsetX, offsetY } = event.nativeEvent;
+      if (labelClass) {
       setIsDrawing(true);
       setCoordinates({ startX: offsetX, startY: offsetY });
     } else {
-      const { offsetX, offsetY } = event.nativeEvent;
       labels.forEach(label => {
         const rectX = Math.min(label.coordinates.startX, label.coordinates.endX);
         const rectY = Math.min(label.coordinates.startY, label.coordinates.endY);
@@ -79,6 +78,15 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
 
   const handleMouseUp = (out) => {
     if (isDrawing) {
+      const { startX, startY, endX, endY} = coordinates
+      if (startX > endX) {
+        coordinates.startX = endX
+        coordinates.endX = startX
+      }
+      if (startY > endY) {
+        coordinates.startY = endY
+        coordinates.endY = startY
+      }      
       const newLabel = new LabelModel(
         labelClass?.name,
         labelClass?.color,
@@ -91,7 +99,6 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
     }
     setLabelMove(null)
     if (moved) {
-      setIdSelectedLabel(null)
       setMoved(false)
     } else {
       if (setLabelMove) {
