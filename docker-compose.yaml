@@ -8,5 +8,5 @@ services:
       - 3333:3000
     volumes:
       - ./:/app/
-    restart: unless-stopped
+    restart: always
     entrypoint: ["npm", "start"]
