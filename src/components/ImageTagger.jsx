@@ -236,12 +236,12 @@ function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, se
         </button>
       ))}
     </div>
-    <p>
+    {/* <p>
       -------------------------- DEBUG ZONE -------------------------- <br/><br/>
       Label Class: {JSON.stringify(labelClass)}  <br/><br/>
       Move ID: {JSON.stringify(labelMove)}
       <br/><br/>--------------------------------------------------------------------------
-    </p>
+    </p> */}
   </div>
   )
 }

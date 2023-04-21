@@ -41,12 +41,12 @@ function App() {
         />
       </div>
       <button style={{ marginLeft: "20px", padding: "10px" }} onClick={finishTask}>Next image</button>
-      <p>
+      {/* <p>
         -------------------------- DEBUG ZONE -------------------------- <br/><br/>
         Selected ID: {JSON.stringify(idSelectedLabel)} <br/><br/>
         Hover ID: {JSON.stringify(idHoverLabel)} <br/><br/>
         ARRAY of labels: {JSON.stringify(labels)} <br/><br/>
-      </p>
+      </p> */}
     </div>
 
   );
