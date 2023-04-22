@@ -6,10 +6,19 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 
 function App() {
+  const [allLabels, setAllLabels] = useState({"0":[],"1":[],"2":[],"3":[],"4":[]})
   const [labels, setLabels] = useState([])
   const [idSelectedLabel, setIdSelectedLabel] = useState(null)
   const [idHoverLabel, setIdHoverLabel] = useState(null)
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const finishTask = () => {
+    // Post labels to server
+    setAllLabels({...allLabels, [currentImageIndex]: labels})
+    setLabels(allLabels[currentImageIndex === 5 - 1 ? 0 : currentImageIndex + 1])
+    setCurrentImageIndex(currentImageIndex === 5 - 1 ? 0 : currentImageIndex + 1);
+    setIdSelectedLabel(null)
+  };
 
   const transformCoordinatesToYOLO = data => {
     const w = Math.abs(data.coordinates.endX - data.coordinates.startX);
@@ -27,7 +36,7 @@ function App() {
   const handleDownload = () => {
     const zip = new JSZip();
 
-    labels.forEach((data) => {
+    allLabels.forEach((data) => {
       transformCoordinatesToYOLO(data)
       createTxtFile(data, zip);
     });
@@ -35,17 +44,6 @@ function App() {
     zip.generateAsync({ type: 'blob' }).then((content) => {
       saveAs(content, 'data.zip');
     });
-  };
-
-  const finishTask = () => {
-    if (currentImageIndex === 5 - 1) {
-      setCurrentImageIndex(0);
-    } else {
-      setCurrentImageIndex(currentImageIndex + 1);
-    }
-    // Post labels to server
-    setLabels([])
-    setIdSelectedLabel(null)
   };
   
   return (
@@ -75,7 +73,9 @@ function App() {
         -------------------------- DEBUG ZONE -------------------------- <br/><br/>
         Selected ID: {JSON.stringify(idSelectedLabel)} <br/><br/>
         Hover ID: {JSON.stringify(idHoverLabel)} <br/><br/>
+        Image ID: {JSON.stringify(currentImageIndex)} <br/><br/>
         ARRAY of labels: {JSON.stringify(labels)} <br/><br/>
+        ARRAY of all labels: {JSON.stringify(allLabels)} <br/><br/>
       </p>
     </div>
 
