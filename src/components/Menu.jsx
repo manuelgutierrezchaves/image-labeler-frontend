@@ -38,15 +38,14 @@ function Menu({ labels, setLabels, idSelectedLabel, setIdSelectedLabel, idHoverL
             <h2>{name}</h2>
             <ul>
               {groups[name].map(label => (
-                <div className="coordinates-x">
+                <div className="coordinates-x" key={label.id}>
                   <li
-                    key={label.id}
                     style={{ backgroundColor: label.color, fontSize: "1.5em" }}
                     onMouseEnter={() => setIdHoverLabel(label.id)}
                     onMouseLeave={() => setIdHoverLabel(null)}
                     onClick={() => handleMouseClick(label.id)}
                   >
-                    ({label.coordinates.startX},{label.coordinates.startY}) - 
+                    ({label.coordinates.startX},{label.coordinates.startY}) -
                       ({label.coordinates.endX},{label.coordinates.endY})
                   </li>
                   <button onClick={() => handleDelete(label.id)}>X</button>
