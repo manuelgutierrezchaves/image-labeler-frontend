@@ -101,6 +101,10 @@ function App() {
   
   return (
     <div>
+      <h1>
+        {currentImageIndex + 1}/{images.length}
+      </h1>
+
       <div className="main-container">
         <ImageTagger
           labels={labels}
@@ -111,6 +115,7 @@ function App() {
           idHoverLabel={idHoverLabel}
           images={images}
         />
+
         <Menu
           labels={labels}
           setLabels={setLabels}
@@ -145,8 +150,7 @@ function App() {
         ARRAY of all labels: {JSON.stringify(allLabels)} <br/><br/>
       </p> */}
     </div>
-
   );
-}
+};
 
 export default App;
