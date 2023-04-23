@@ -15,8 +15,8 @@ function App() {
   const finishTask = () => {
     // Post labels to server
     setAllLabels({...allLabels, [currentImageIndex]: labels})
-    setLabels(allLabels[currentImageIndex === 5 - 1 ? 0 : currentImageIndex + 1])
-    setCurrentImageIndex(currentImageIndex === 5 - 1 ? 0 : currentImageIndex + 1);
+    setLabels(allLabels[currentImageIndex === images.length - 1 ? 0 : currentImageIndex + 1])
+    setCurrentImageIndex(currentImageIndex === images.length - 1 ? 0 : currentImageIndex + 1);
     setIdSelectedLabel(null)
   };
 
