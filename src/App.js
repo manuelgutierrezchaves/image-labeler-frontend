@@ -64,20 +64,34 @@ function App() {
   };
 
   const createTxtFile = (data, zip, index) => {
-    const content = data.map(item => `${item.name} ${item.yolo.x} ${item.yolo.y} ${item.yolo.w} ${item.yolo.h}`).join('\n');
-    zip.file(`file-${index}.txt`, content);
+    let content = "";
+    if (data) {
+      content = data.map(item => `${item.name} ${item.yolo.x} ${item.yolo.y} ${item.yolo.w} ${item.yolo.h}`).join('\n');
+    }
+    zip.file(`${index}.txt`, content);
   };
 
   const handleDownload = () => {
     const zip = new JSZip();
-    for (const key in allLabels) {
-      allLabels[key].forEach((data) => {
+    const labelsFolder = zip.folder("labels");
+    const imagesFolder = zip.folder("images");
+
+    for (const key in images) {
+      let oneLabel = key in allLabels ? allLabels[key] : null
+      oneLabel.forEach((data) => {
         transformCoordinatesToYOLO(data);
-      })
-      createTxtFile(allLabels[key], zip, key);
-    };
-    zip.generateAsync({ type: 'blob' }).then((content) => {
-      saveAs(content, 'data.zip');
+      });
+      createTxtFile(oneLabel, labelsFolder, key)
+    }
+
+    images.forEach((image, index) => {
+      const imageName = `${index}.jpg`;
+      const dataURI = image.split(",")[1];
+      imagesFolder.file(imageName, dataURI, { base64: true });
+    });
+
+    zip.generateAsync({ type: "blob" }).then((content) => {
+      saveAs(content, "dataset.zip");
     });
   };
   
