@@ -69,14 +69,14 @@ function App() {
       <button style={{ marginLeft: "20px", padding: "10px" }} onClick={finishTask}>Next image</button>
       <button style={{ marginLeft: "20px", padding: "10px" }} onClick={handleDownload}>Download</button>
 
-      <p>
+      {/* <p>
         -------------------------- DEBUG ZONE -------------------------- <br/><br/>
         Selected ID: {JSON.stringify(idSelectedLabel)} <br/><br/>
         Hover ID: {JSON.stringify(idHoverLabel)} <br/><br/>
         Image ID: {JSON.stringify(currentImageIndex)} <br/><br/>
         ARRAY of labels: {JSON.stringify(labels)} <br/><br/>
         ARRAY of all labels: {JSON.stringify(allLabels)} <br/><br/>
-      </p>
+      </p> */}
     </div>
 
   );
