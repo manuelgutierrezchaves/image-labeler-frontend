@@ -28,19 +28,19 @@ function App() {
     data.yolo = {"x": x, "y": y, "w": w, "h": h};
   };
 
-  const createTxtFile = (data, zip) => {
-    const content = `class: ${data.name}, x: ${data.yolo.x}, y: ${data.yolo.y}, w: ${data.yolo.w}, h: ${data.yolo.h}`;
-    zip.file(`file-${data.id}.txt`, content);
+  const createTxtFile = (data, zip, index) => {
+    const content = data.map(item => `${item.name} ${item.yolo.x} ${item.yolo.y} ${item.yolo.w} ${item.yolo.h}`).join('\n');
+    zip.file(`file-${index}.txt`, content);
   };
 
   const handleDownload = () => {
     const zip = new JSZip();
-
-    allLabels.forEach((data) => {
-      transformCoordinatesToYOLO(data)
-      createTxtFile(data, zip);
-    });
-
+    for (const key in allLabels) {
+      allLabels[key].forEach((data) => {
+        transformCoordinatesToYOLO(data);
+      })
+      createTxtFile(allLabels[key], zip, key);
+    };
     zip.generateAsync({ type: 'blob' }).then((content) => {
       saveAs(content, 'data.zip');
     });
