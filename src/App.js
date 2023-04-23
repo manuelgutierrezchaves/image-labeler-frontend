@@ -135,6 +135,8 @@ function App() {
         Upload Images
         <input type="file" style={{ display: "none" }} multiple onChange={handleFileUpload} />
       </label>
+
+      {/* <p>
         -------------------------- DEBUG ZONE -------------------------- <br/><br/>
         Selected ID: {JSON.stringify(idSelectedLabel)} <br/><br/>
         Hover ID: {JSON.stringify(idHoverLabel)} <br/><br/>
