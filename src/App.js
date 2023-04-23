@@ -90,6 +90,10 @@ function App() {
       imagesFolder.file(imageName, dataURI, { base64: true });
     });
 
+    const classNames = ["manzana", "pera", "platano", "limon"]
+    const content = `train: ./images\nval: ./images\n\nnc: ${classNames.length}\n\nnames: ${JSON.stringify(classNames)}`
+    zip.file("train.yaml", content);
+
     zip.generateAsync({ type: "blob" }).then((content) => {
       saveAs(content, "dataset.zip");
     });
