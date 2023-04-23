@@ -21,28 +21,35 @@ function App() {
   const [isFirstUpload, setIsFirstUpload] = useState(true);
 
   function handleFileUpload(event) {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onload = function (event) {
-      if (isFirstUpload) {
-        setAllLabels({})
-        setLabels([])
-        setIdSelectedLabel(null)
-        setIdHoverLabel(null)
-        setCurrentImageIndex(0)
-        setImages([event.target.result]);
-        setIsFirstUpload(false);
-      } else {
-        setImages([...images, event.target.result]);
-      }
-    };
-    reader.readAsDataURL(file);
+    const files = event.target.files;
+    const newImages = [];
+
+    for (let i = 0; i < files.length; i++) {
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        newImages.push(event.target.result);
+
+        if (newImages.length === files.length) {
+          if (isFirstUpload) {
+            setAllLabels({})
+            setLabels([])
+            setIdSelectedLabel(null)
+            setIdHoverLabel(null)
+            setCurrentImageIndex(0)
+            setImages(newImages);
+            setIsFirstUpload(false);
+          } else {
+            setImages([...images, ...newImages]);
+          }
+        }
+      };
+      reader.readAsDataURL(files[i]);
+    }
   };
 
   const nextImage = () => {
     setAllLabels({...allLabels, [currentImageIndex]: labels});
     let nextImageIndex = currentImageIndex === images.length - 1 ? 0 : currentImageIndex + 1
-    console.log(nextImageIndex)
     setLabels(nextImageIndex in allLabels ? allLabels[nextImageIndex] : []);
     setCurrentImageIndex(nextImageIndex);
     setIdSelectedLabel(null);
@@ -95,10 +102,21 @@ function App() {
           setIdHoverLabel={setIdHoverLabel}
         />
       </div>
-      <button style={{ marginLeft: "20px", padding: "10px" }} onClick={nextImage}>Next image</button>
-      <button style={{ marginLeft: "20px", padding: "10px" }} onClick={handleDownload}>Download</button>
-      <input style={{ marginLeft: "20px", padding: "10px" }} type="file" onChange={handleFileUpload} />
-      {/* <p>
+
+      <label style={{ marginLeft: "20px", padding: "10px", backgroundColor: "#007bff", color: "#fff", borderRadius: "4px", cursor: "pointer" }}>
+        Next image
+        <button onClick={nextImage} style={{ display: "none" }} />
+      </label>
+
+      <label style={{ marginLeft: "20px", padding: "10px", backgroundColor: "#007bff", color: "#fff", borderRadius: "4px", cursor: "pointer" }}>
+        Download labels
+        <button onClick={handleDownload} style={{ display: "none" }} />
+      </label>
+
+      <label style={{ marginLeft: "20px", padding: "10px", backgroundColor: "#007bff", color: "#fff", borderRadius: "4px", cursor: "pointer" }}>
+        Upload Images
+        <input type="file" style={{ display: "none" }} multiple onChange={handleFileUpload} />
+      </label>
         -------------------------- DEBUG ZONE -------------------------- <br/><br/>
         Selected ID: {JSON.stringify(idSelectedLabel)} <br/><br/>
         Hover ID: {JSON.stringify(idHoverLabel)} <br/><br/>
