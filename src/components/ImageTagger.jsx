@@ -2,15 +2,8 @@ import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import "../styles/ImageTagger.css"
 import LabelModel from '../objects/LabelModel';
-import image1 from '../images/1.jpg';
-import image2 from '../images/2.jpg';
-import image3 from '../images/3.jpg';
-import image4 from '../images/4.jpg';
-import image5 from '../images/5.jpg';
 
-const images = [image1, image2, image3, image4, image5]
-
-function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, setIdSelectedLabel, idHoverLabel }) {
+function ImageTagger({ labels, setLabels, currentImageIndex, idSelectedLabel, setIdSelectedLabel, idHoverLabel, images }) {
 
   const classes = [
     {"name": "manzana", "color": "red"},

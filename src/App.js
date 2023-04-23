@@ -5,19 +5,35 @@ import ImageTagger from './components/ImageTagger';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 
+import image1 from './images/1.jpg';
+import image2 from './images/2.jpg';
+import image3 from './images/3.jpg';
+import image4 from './images/4.jpg';
+import image5 from './images/5.jpg';
+
 function App() {
-  const [allLabels, setAllLabels] = useState({"0":[],"1":[],"2":[],"3":[],"4":[]})
+  const [allLabels, setAllLabels] = useState({})
   const [labels, setLabels] = useState([])
   const [idSelectedLabel, setIdSelectedLabel] = useState(null)
   const [idHoverLabel, setIdHoverLabel] = useState(null)
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [images, setImages] = useState([image1, image2, image3, image4, image5]);
 
-  const finishTask = () => {
+  function handleFileUpload(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = function (event) {
+      setImages([...images, event.target.result]);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const nextImage = () => {
     // Post labels to server
-    setAllLabels({...allLabels, [currentImageIndex]: labels})
-    setLabels(allLabels[currentImageIndex === images.length - 1 ? 0 : currentImageIndex + 1])
+    setAllLabels({...allLabels, [currentImageIndex]: labels});
+    setLabels(currentImageIndex + 1 in allLabels ? allLabels[currentImageIndex === images.length - 1 ? 0 : currentImageIndex + 1] : [])
     setCurrentImageIndex(currentImageIndex === images.length - 1 ? 0 : currentImageIndex + 1);
-    setIdSelectedLabel(null)
+    setIdSelectedLabel(null);
   };
 
   const transformCoordinatesToYOLO = data => {
@@ -56,6 +72,7 @@ function App() {
           idSelectedLabel={idSelectedLabel}
           setIdSelectedLabel={setIdSelectedLabel}
           idHoverLabel={idHoverLabel}
+          images={images}
         />
         <Menu
           labels={labels}
@@ -66,9 +83,9 @@ function App() {
           setIdHoverLabel={setIdHoverLabel}
         />
       </div>
-      <button style={{ marginLeft: "20px", padding: "10px" }} onClick={finishTask}>Next image</button>
+      <button style={{ marginLeft: "20px", padding: "10px" }} onClick={nextImage}>Next image</button>
       <button style={{ marginLeft: "20px", padding: "10px" }} onClick={handleDownload}>Download</button>
-
+      <input style={{ marginLeft: "20px", padding: "10px" }} type="file" onChange={handleFileUpload} />
       {/* <p>
         -------------------------- DEBUG ZONE -------------------------- <br/><br/>
         Selected ID: {JSON.stringify(idSelectedLabel)} <br/><br/>
