@@ -18,21 +18,33 @@ function App() {
   const [idHoverLabel, setIdHoverLabel] = useState(null)
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [images, setImages] = useState([image1, image2, image3, image4, image5]);
+  const [isFirstUpload, setIsFirstUpload] = useState(true);
 
   function handleFileUpload(event) {
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.onload = function (event) {
-      setImages([...images, event.target.result]);
+      if (isFirstUpload) {
+        setAllLabels({})
+        setLabels([])
+        setIdSelectedLabel(null)
+        setIdHoverLabel(null)
+        setCurrentImageIndex(0)
+        setImages([event.target.result]);
+        setIsFirstUpload(false);
+      } else {
+        setImages([...images, event.target.result]);
+      }
     };
     reader.readAsDataURL(file);
   };
 
   const nextImage = () => {
-    // Post labels to server
     setAllLabels({...allLabels, [currentImageIndex]: labels});
-    setLabels(currentImageIndex + 1 in allLabels ? allLabels[currentImageIndex === images.length - 1 ? 0 : currentImageIndex + 1] : [])
-    setCurrentImageIndex(currentImageIndex === images.length - 1 ? 0 : currentImageIndex + 1);
+    let nextImageIndex = currentImageIndex === images.length - 1 ? 0 : currentImageIndex + 1
+    console.log(nextImageIndex)
+    setLabels(nextImageIndex in allLabels ? allLabels[nextImageIndex] : []);
+    setCurrentImageIndex(nextImageIndex);
     setIdSelectedLabel(null);
   };
 
