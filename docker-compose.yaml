@@ -2,8 +2,8 @@ version: "3.3"
 
 services:
   labeler:
+    # image: manuxyz/image-labeller-frontend:1.0.3
     build: .
     ports:
-      - 3000:3000
+      - 80:80
     restart: unless-stopped
-    entrypoint: ["npm", "start"]
